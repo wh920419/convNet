@@ -1,0 +1,323 @@
+name: "CNN_T1"
+layer {
+  name: "input"
+  num_channels: 1
+  is_input: true
+  image_size_y: 128
+  image_size_x: 128
+  display: true
+}
+layer {
+  name: "hidden1_conv"
+  num_channels: 32
+  activation: RECTIFIED_LINEAR
+  display: true
+}
+layer {
+  name: "hidden1_maxpool"
+  num_channels: 32
+}
+layer {
+  name: "hidden2_conv"
+  num_channels: 32
+  activation: RECTIFIED_LINEAR
+  display: true
+}
+layer {
+  name: "hidden3_conv"
+  num_channels: 16
+  activation: RECTIFIED_LINEAR
+  display: true
+}
+layer {
+  name: "hidden4_conv"
+  num_channels: 16
+  activation: RECTIFIED_LINEAR
+  display: true
+}
+layer {
+  name: "hidden5_conv"
+  num_channels: 16
+  activation: RECTIFIED_LINEAR
+  display: true
+}
+layer {
+  name: "hidden6_conv"
+  num_channels: 16
+  activation: RECTIFIED_LINEAR
+  display: true
+}
+layer {
+  name: "feature"
+  num_channels: 2048
+  dropprob: 0.5
+  activation: RECTIFIED_LINEAR
+  display: true
+}
+layer {
+  name: "output"
+  num_channels: 4449
+  activation: SOFTMAX
+  is_output: true
+}
+edge {
+  source: "input"
+  dest: "hidden1_conv"
+  edge_type: CONVOLUTIONAL
+  kernel_size: 11
+  stride: 1
+  padding: 1
+  initialization: DENSE_UNIFORM_SQRT_FAN_IN
+  init_wt: 0.7
+  init_bias: 0.1
+  weight_optimizer {
+    epsilon: 1e-005
+    initial_momentum: 0
+    final_momentum: 0
+    momentum_transition_timescale: 2000
+    l2_decay: 0.0005
+  }
+  bias_optimizer {
+    epsilon: 1e-005
+    initial_momentum: 0
+    final_momentum: 0
+    momentum_transition_timescale: 2000
+  }
+  shared_bias: true
+  partial_sum: 4
+}
+edge {
+  source: "hidden1_conv"
+  dest: "hidden1_maxpool"
+  edge_type: MAXPOOL
+  kernel_size: 3
+  stride: 2
+  padding: 1
+}
+edge {
+  source: "hidden1_maxpool"
+  dest: "hidden2_conv"
+  edge_type: CONVOLUTIONAL
+  kernel_size: 9
+  stride: 1
+  padding: 0
+  initialization: DENSE_UNIFORM_SQRT_FAN_IN
+  init_wt: 7.9
+  init_bias: 0.55
+  weight_optimizer {
+    epsilon: 1e-005
+    initial_momentum: 0
+    final_momentum: 0
+    momentum_transition_timescale: 2000
+    l2_decay: 0.0005
+  }
+  bias_optimizer {
+    epsilon: 1e-005
+    initial_momentum: 0
+    final_momentum: 0
+    momentum_transition_timescale: 2000
+  }
+  shared_bias: true
+  partial_sum: 13
+}
+edge {
+  source: "hidden2_conv"
+  dest: "hidden3_conv"
+  edge_type: LOCAL
+  kernel_size: 9
+  stride: 1
+  padding: 1
+  initialization: DENSE_UNIFORM_SQRT_FAN_IN
+  init_wt: 48
+  init_bias: 0.0025
+  weight_optimizer {
+    epsilon: 0.001
+    initial_momentum: 0
+    final_momentum: 0
+    momentum_transition_timescale: 2000
+    l2_decay: 0.0005
+  }
+  bias_optimizer {
+    epsilon: 0.001
+    initial_momentum: 0
+    final_momentum: 0
+    momentum_transition_timescale: 2000
+  }
+  shared_bias: true
+  partial_sum: 13
+}
+edge {
+  source: "hidden3_conv"
+  dest: "hidden4_conv"
+  edge_type: LOCAL
+  kernel_size: 7
+  stride: 2
+  padding: 1
+  initialization: DENSE_UNIFORM_SQRT_FAN_IN
+  init_wt: 16.76
+  init_bias: 0.67
+  weight_optimizer {
+    epsilon: 0.001
+    initial_momentum: 0
+    final_momentum: 0
+    momentum_transition_timescale: 2000
+    l2_decay: 0.0005
+  }
+  bias_optimizer {
+    epsilon: 0.001
+    initial_momentum: 0
+    final_momentum: 0
+    momentum_transition_timescale: 2000
+  }
+  shared_bias: true
+  partial_sum: 13
+}
+edge {
+  source: "hidden4_conv"
+  dest: "hidden5_conv"
+  edge_type: LOCAL
+  kernel_size: 5
+  stride: 1
+  padding: 0
+  initialization: DENSE_UNIFORM_SQRT_FAN_IN
+  init_wt: 19.81
+  init_bias: 0.6
+  weight_optimizer {
+    epsilon: 0.001
+    initial_momentum: 0
+    final_momentum: 0
+    momentum_transition_timescale: 2000
+    l2_decay: 0.0005
+  }
+  bias_optimizer {
+    epsilon: 0.001
+    initial_momentum: 0
+    final_momentum: 0
+    momentum_transition_timescale: 2000
+  }
+  shared_bias: true
+  partial_sum: 11
+}
+edge {
+  source: "hidden5_conv"
+  dest: "hidden6_conv"
+  edge_type: LOCAL
+  kernel_size: 5
+  stride: 1
+  padding: 0
+  initialization: DENSE_UNIFORM_SQRT_FAN_IN
+  init_wt: 20
+  init_bias: 0.38
+  weight_optimizer {
+    epsilon: 0.001
+    initial_momentum: 0
+    final_momentum: 0
+    momentum_transition_timescale: 2000
+    l2_decay: 0.0005
+  }
+  bias_optimizer {
+    epsilon: 0.001
+    initial_momentum: 0
+    final_momentum: 0
+    momentum_transition_timescale: 2000
+  }
+  shared_bias: true
+  partial_sum: 11
+}
+edge {
+  source: "hidden6_conv"
+  dest: "feature"
+  edge_type: FC
+  initialization: DENSE_UNIFORM_SQRT_FAN_IN
+  init_wt: 2.66
+  weight_optimizer {
+    epsilon: 0.001
+    initial_momentum: 0
+    final_momentum: 0
+    momentum_transition_timescale: 2000
+    l2_decay: 0.0005
+    weight_norm_limit: 4
+  }
+  bias_optimizer {
+    epsilon: 0.001
+    initial_momentum: 0
+    final_momentum: 0
+    momentum_transition_timescale: 2000
+  }
+}
+edge {
+  source: "feature"
+  dest: "output"
+  edge_type: FC
+  initialization: DENSE_UNIFORM_SQRT_FAN_IN
+  init_wt: 0.59
+  weight_optimizer {
+    epsilon: 0.001
+    initial_momentum: 0
+    final_momentum: 0
+    momentum_transition_timescale: 2000
+    l2_decay: 0.0005
+    weight_norm_limit: 4
+  }
+  bias_optimizer {
+    epsilon: 0.001
+    initial_momentum: 0
+    final_momentum: 0
+    momentum_transition_timescale: 2000
+  }
+}
+seed: 142
+max_iter: 670000
+display_after: 500
+save_after: 4000
+patch_size: 128
+print_after: 1000
+checkpoint_dir: "D://program//TestSystem_Matlab//netdata//RAW"
+timestamp: "20150210093912"
+timestamp: "20150210145053"
+display: true
+validate_after: 1000
+reduce_lr_factor: 0.95
+reduce_lr_threshold: 0.05
+reduce_lr_num_steps: 8
+reduce_lr_max: 1000
+train_dataset {
+  data_config {
+    file_pattern: "../dataset/IFN_nomask_v2_train_hist/images.h5"
+    layer_name: "input"
+    dataset_name: "data"
+    data_type: HDF5
+    pixelwise_normalize: true
+    normalize: true
+    mean_file: "../pixel_mean.h5"
+  }
+  data_config {
+    file_pattern: "../dataset/IFN_nomask_v2_train_hist/labels.txt"
+    layer_name: "output"
+    data_type: TXT
+  }
+  batch_size: 128
+  chunk_size: 128
+  pipeline_loads: true
+}
+valid_dataset {
+  data_config {
+    file_pattern: "../dataset/IFN_nomask_v2_val_hist/images.h5"
+    layer_name: "input"
+    dataset_name: "data"
+    data_type: HDF5
+    pixelwise_normalize: true
+    normalize: true
+    mean_file: "../pixel_mean.h5"
+  }
+  data_config {
+    file_pattern: "../dataset/IFN_nomask_v2_val_hist/labels.txt"
+    layer_name: "output"
+    data_type: TXT
+  }
+  batch_size: 128
+  chunk_size: 128
+  pipeline_loads: true
+  randomize_cpu: true
+  randomize_gpu: true
+}
