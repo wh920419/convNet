@@ -42,15 +42,8 @@ layer {
   display: true
 }
 layer {
-  name: "hidden6_conv"
-  num_channels: 16
-  activation: RECTIFIED_LINEAR
-  display: true
-}
-layer {
   name: "feature"
-  num_channels: 2048
-  dropprob: 0.5
+  num_channels: 4096
   activation: RECTIFIED_LINEAR
   display: true
 }
